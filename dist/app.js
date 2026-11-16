@@ -15,6 +15,7 @@ let selectedPool = null;
 let activePool = pools[0];
 let currentSlot = null;
 let chosenSlot = null;
+let routeOrigin = '';
 const byId = id => document.getElementById(id);
 const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const mapUrl = pool => 'https://yandex.ru/maps/?text=' + encodeURIComponent(pool.query || pool.address);
@@ -30,14 +31,32 @@ function updateContactLinks() {
 
 function setMap(pool) {
   byId('map-select').value = pool.id;
-  byId('map-external').href = mapUrl(pool);
-  byId('map-preview-link').href = mapUrl(pool);
   byId('location-address').textContent = pool.address;
-  byId('sketch-title').textContent = `Схема расположения: ${pool.name}`;
-  byId('sketch-road').textContent = pool.id === 'ocsp' ? 'Автозаводская улица' : 'Коломенский проезд';
-  byId('sketch-metro').textContent = pool.id === 'ocsp' ? 'ЗИЛ (МЦК)' : 'Москва';
-  byId('sketch-metro-node').style.display = pool.id === 'ocsp' ? '' : 'none';
+  const params = new URLSearchParams({rtext: `${routeOrigin}~${pool.address}`, rtt: byId('route-mode').value});
+  const embed = routeOrigin ? `https://yandex.ru/map-widget/v1/?${params}` : pool.mapEmbed;
+  const frame = byId('map-frame');
+  if (frame.getAttribute('src') !== embed) frame.src = embed;
+  frame.title = routeOrigin ? `Маршрут до бассейна ${pool.name} на Яндекс Картах` : `Бассейн ${pool.name} на Яндекс Картах`;
+  byId('map-external').href = routeOrigin ? `https://yandex.ru/maps/?${params}` : mapUrl(pool);
+  byId('route-reset').hidden = !routeOrigin;
+  byId('route-status').hidden = !routeOrigin;
+  byId('route-status').textContent = routeOrigin ? `${routeOrigin} → ${pool.name}. Уточнить начальную точку и посмотреть время в пути можно на карте.` : '';
 }
+
+byId('route-form').addEventListener('submit', event => {
+  event.preventDefault();
+  const nextOrigin = byId('route-from').value.replace(/~/g, ' ').trim();
+  if (!nextOrigin) { byId('route-from').value = ''; byId('route-from').reportValidity(); return; }
+  routeOrigin = nextOrigin;
+  setMap(activePool);
+});
+byId('route-mode').addEventListener('change', () => { if (routeOrigin) setMap(activePool); });
+byId('route-reset').addEventListener('click', () => {
+  routeOrigin = '';
+  byId('route-from').value = '';
+  setMap(activePool);
+  byId('route-from').focus();
+});
 
 function setPool(id, focus = false) {
   const pool = pools.find(pool => pool.id === id) || pools[0];
@@ -52,7 +71,7 @@ function setPool(id, focus = false) {
   panel.setAttribute('aria-labelledby', 'tab-' + pool.id);
   const shortDays = {Понедельник:'ПН',Вторник:'ВТ',Среда:'СР',Четверг:'ЧТ',Суббота:'СБ',Воскресенье:'ВС'};
   const scheduleMarkup = pool.schedule.length ? `<div class="weekdays" role="tablist" aria-label="Дни групповых тренировок">${pool.schedule.map((row,index)=>`<button type="button" class="schedule-day" role="tab" id="schedule-day-${index}" data-day-index="${index}" aria-label="${escapeHtml(row[0])}" aria-selected="${index===0}" aria-controls="pool-day-panel" tabindex="${index===0?0:-1}">${shortDays[row[0]]}<small>${index<4?'БУДНИ':'ВЫХОДНОЙ'}</small></button>`).join('')}</div><div class="day-details" id="pool-day-panel" role="tabpanel" aria-labelledby="schedule-day-0" aria-live="polite"></div>` : '<p class="schedule-empty">Расписание и доступные форматы занятий в этом бассейне уточняйте у администратора.</p>';
-  panel.innerHTML = `<div class="pool-info"><p class="eyebrow">ЗДЕСЬ МЫ ПЛАВАЕМ</p><h3>${escapeHtml(pool.fullName || pool.name)}</h3><p>${escapeHtml(pool.address)}</p>${pool.metro ? `<div class="metro"><span></span>${escapeHtml(pool.metro)}</div>` : ''}<a class="text-link" href="${mapUrl(pool)}" target="_blank" rel="noopener noreferrer">Посмотреть на карте <span>↗</span></a>${pool.id === 'ocsp' ? '<div class="personal-schedule"><span class="type-label">ПЕРСОНАЛЬНЫЕ ЗАНЯТИЯ</span><p>Будни — после 16:00<br>Выходные — в течение дня</p></div>' : ''}</div><div class="pool-schedule"><p class="schedule-head">${pool.schedule.length ? 'ГРУППЫ · ТРЕНЕР АЛЕКСЕЙ МУНТЯНУ' : 'ПОДБЕРЁМ УДОБНОЕ ВРЕМЯ'}</p>${scheduleMarkup}<a class="button button-primary" href="#contacts" data-program="Бесплатное занятие в группе" data-pool="${pool.id}">Записаться в этот бассейн <span>↗</span></a></div>`;
+  panel.innerHTML = `<div class="pool-info"><p class="eyebrow">ЗДЕСЬ МЫ ПЛАВАЕМ</p><h3>${escapeHtml(pool.fullName || pool.name)}</h3><p>${escapeHtml(pool.address)}</p>${pool.metro ? `<div class="metro"><span></span>${escapeHtml(pool.metro)}</div>` : ''}<a class="text-link" href="${mapUrl(pool)}" target="_blank" rel="noopener noreferrer">Посмотреть на карте <span>↗</span></a>${pool.id === 'ocsp' ? '<div class="personal-schedule"><span class="type-label">ПЕРСОНАЛЬНЫЕ ЗАНЯТИЯ</span><p>Будни — после 16:00<br>Выходные — в течение дня</p></div>' : ''}${pool.id === 'ocsp' ? '<img class="pool-scene" src="assets/09-swimming-lanes.jpg" alt="Ученики FLASH SWIM на дорожке у стартовых тумб" width="1280" height="718" loading="lazy" decoding="async">' : ''}</div><div class="pool-schedule"><p class="schedule-head">${pool.schedule.length ? 'ГРУППЫ · ТРЕНЕР АЛЕКСЕЙ МУНТЯНУ' : 'ПОДБЕРЁМ УДОБНОЕ ВРЕМЯ'}</p>${scheduleMarkup}<a class="button button-primary" href="#contacts" data-program="Бесплатное занятие в группе" data-pool="${pool.id}">Записаться в этот бассейн <span>↗</span></a></div>`;
   if(pool.schedule.length) setDay(0);
   setMap(pool);
   if (focus) byId('tab-' + pool.id).focus();
