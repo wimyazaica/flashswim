@@ -1,5 +1,67 @@
 [
-  {"type":"video","src":"assets/flashswim-training.mp4","poster":"assets/flashswim-video-poster.jpg","alt":"Видео тренировок FLASH SWIM: плавание, работа с тренером и занятия команды","caption":"Видео с тренировок FLASH SWIM","focus":"center","duration":22000},
-  {"type":"image","src":"assets/swim-original.jpg","alt":"Команда FLASH SWIM после тренировки в бассейне","caption":"Наша команда после тренировки","focus":"72% 45%","duration":7000},
-  {"type":"image","src":"assets/training-team.jpg","alt":"Ученики FLASH SWIM с тренером и плавательным инвентарём у бассейна","caption":"Тренируемся и радуемся воде","focus":"65% 45%","duration":7000}
+  {
+    "type": "video",
+    "src": "assets/flashswim-training.mp4",
+    "poster": "assets/flashswim-video-poster.jpg",
+    "alt": "Видео тренировок FLASH SWIM: плавание, работа с тренером и занятия команды",
+    "caption": "Видео с тренировок FLASH SWIM",
+    "focus": "center",
+    "duration": 22000
+  },
+  {
+    "type": "image",
+    "src": "assets/team-with-coach.jpg",
+    "alt": "Команда FLASH SWIM с тренером в бассейне",
+    "caption": "Растём одной командой",
+    "focus": "center",
+    "duration": 7000
+  },
+  {
+    "type": "image",
+    "src": "assets/pool-training.jpg",
+    "alt": "Ученики FLASH SWIM на дорожке у стартовых тумб",
+    "caption": "На одной дорожке",
+    "focus": "center",
+    "duration": 7000
+  },
+  {
+    "type": "image",
+    "src": "assets/gym-training.jpg",
+    "alt": "Групповое занятие FLASH SWIM на спортивных матах в зале",
+    "caption": "Сильнее в воде и на суше",
+    "focus": "center",
+    "duration": 7000
+  },
+  {
+    "type": "image",
+    "src": "assets/pool-team.jpg",
+    "alt": "Ученики FLASH SWIM в бассейне у бортика",
+    "caption": "Вода объединяет",
+    "focus": "center",
+    "duration": 7000
+  },
+  {
+    "type": "image",
+    "src": "assets/team-outdoors.jpg",
+    "alt": "Команда FLASH SWIM перед зданием бассейна",
+    "caption": "Вместе за пределами бассейна",
+    "focus": "center",
+    "duration": 7000
+  },
+  {
+    "type": "image",
+    "src": "assets/swim-original.jpg",
+    "alt": "Команда FLASH SWIM после тренировки в бассейне",
+    "caption": "Наша команда после тренировки",
+    "focus": "72% 45%",
+    "duration": 7000
+  },
+  {
+    "type": "image",
+    "src": "assets/training-team.jpg",
+    "alt": "Ученики FLASH SWIM с тренером и плавательным инвентарём у бассейна",
+    "caption": "Тренируемся и радуемся воде",
+    "focus": "65% 45%",
+    "duration": 7000
+  }
 ]
