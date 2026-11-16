@@ -1,0 +1,162 @@
+/* FLASH SWIM's own illustrated lanes. Motion is driven by scroll/selection. */
+.swim-divider {
+  --swim-water: #c9f7ef;
+  --swim-ink: #075a66;
+  position: relative;
+  isolation: isolate;
+  height: clamp(154px, 11vw, 180px);
+  overflow: hidden;
+  background: var(--swim-water);
+}
+.swim-divider-stage { position: absolute; inset: 0; overflow: hidden; }
+.swim-divider-stage::before,
+.swim-divider-stage::after {
+  content: '';
+  position: absolute;
+  inset: -25% -5%;
+  pointer-events: none;
+  background: repeating-radial-gradient(ellipse at 15% 45%, transparent 0 29px, #ffffff50 30px 32px, transparent 33px 67px);
+  transform: rotate(-8deg) scale(1.1);
+  opacity: .55;
+}
+.swim-divider-stage::after {
+  background: repeating-radial-gradient(ellipse at 75% 60%, transparent 0 39px, #ffffff70 40px 42px, transparent 43px 89px);
+  transform: rotate(9deg) scale(1.15);
+  opacity: .45;
+}
+.swim-rope {
+  position: absolute;
+  z-index: 2;
+  left: -10px;
+  right: -10px;
+  top: 62px;
+  height: 8px;
+  border-radius: 5px;
+  background: repeating-linear-gradient(90deg, #f33446 0 19px, #fff9e9 19px 23px, #ffd435 23px 42px, #fff9e9 42px 46px, #208bd5 46px 65px, #fff9e9 65px 69px, #ffffff 69px 88px, #fff9e9 88px 92px);
+  box-shadow: 0 2px 0 #066e7423, inset 0 2px 0 #ffffff6e;
+}
+.swim-rope-bottom { top: auto; bottom: 17px; }
+.swim-lane-swimmer {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  top: calc(50% + 23px);
+  width: 130px;
+  height: 80px;
+  will-change: transform;
+  pointer-events: none;
+}
+.swimmer-illustration { display: block; width: 100%; height: 100%; overflow: visible; }
+.swimmer-facing { transform-origin: 58px 36px; }
+.swimmer-arm-front { transform-origin: 67px 28px; }
+.swimmer-arm-back { transform-origin: 67px 44px; }
+.swimmer-leg-top { transform-origin: 45px 32px; }
+.swimmer-leg-bottom { transform-origin: 45px 40px; }
+.swim-lane-wake {
+  position: absolute;
+  z-index: 1;
+  left: -55px;
+  top: 7px;
+  width: 88px;
+  height: 50px;
+  opacity: .75;
+  transform-origin: right center;
+  background: repeating-radial-gradient(ellipse at 100% 50%, transparent 0 9px, #ffffffbe 10px 11px, transparent 12px 22px);
+  border-radius: 50%;
+}
+.swim-lane-label {
+  position: absolute;
+  z-index: 3;
+  top: 27px;
+  right: max(30px, calc((100% - 1300px) / 2));
+  max-width: 45%;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1.3;
+  letter-spacing: 1.7px;
+  text-transform: uppercase;
+  color: var(--swim-ink);
+  opacity: 1;
+}
+.swim-lane-label:empty { display: none; }
+.swim-style-label {
+  position: absolute;
+  z-index: 3;
+  left: max(30px, calc((100% - 1300px) / 2));
+  top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #075a66;
+  background: #eafff7ec;
+  border: 1px solid #ffffffd9;
+  border-radius: 30px;
+  padding: 9px 15px 9px 9px;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  box-shadow: 0 3px 12px #008b7910;
+}
+.swim-style-label strong { font-weight: 800; }
+.swim-style-number {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  color: white;
+  background: #0c8f91;
+  font-size: 10px;
+  letter-spacing: .4px;
+}
+
+/* A second, smaller swimmer follows the active weekday, like a lane marker. */
+.schedule-swimmer-lane {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 80px;
+  margin: 3px 0 14px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #d9fbf5;
+}
+.schedule-swimmer-lane::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-radial-gradient(ellipse at 50% 50%, transparent 0 15px, #ffffffa0 16px 17px, transparent 18px 41px);
+  transform: rotate(-8deg) scale(1.2);
+  opacity: .5;
+}
+.schedule-swimmer-lane .swim-rope { top: 8px; height: 5px; background-size: auto; }
+.schedule-swimmer-lane .swim-rope-bottom { top: auto; bottom: 8px; }
+.schedule-swimmer-lane .swim-lane-swimmer { width: 68px; height: 44px; }
+.schedule-swimmer-lane .swim-lane-swimmer { top: 50%; }
+.schedule-swimmer-lane .swim-lane-wake { left: -35px; top: 6px; width: 54px; height: 33px; opacity: .65; }
+.schedule-day { position: relative; }
+.schedule-day[aria-selected="true"]::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: calc(50% - 3px);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #087f80;
+}
+@media (max-width:680px) {
+  .swim-divider { height: 137px; }
+  .swim-rope { top: 48px; height: 6px; background-size: 92px 100%; }
+  .swim-rope-bottom { top: auto; bottom: 12px; }
+  .swim-lane-swimmer { width: 112px; height: 68px; top: calc(50% + 19px); }
+  .swim-lane-label { right: 18px; top: 18px; font-size: 10px; letter-spacing: .8px; max-width: 43%; }
+  .swim-style-label { left: 18px; top: 7px; padding: 7px 10px 7px 7px; font-size: 10px; letter-spacing: .8px; gap: 7px; }
+  .swim-style-number { width: 20px; height: 20px; font-size: 9px; }
+  .schedule-swimmer-lane { height: 73px; margin-top: 6px; border-radius: 10px; }
+  .schedule-swimmer-lane .swim-lane-swimmer { width: 62px; height: 42px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .swim-lane-swimmer { will-change: auto; }
+}

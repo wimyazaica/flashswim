@@ -1,0 +1,5 @@
+[
+  {"type":"video","src":"assets/flashswim-training.mp4","poster":"assets/flashswim-video-poster.jpg","alt":"Видео тренировок FLASH SWIM: плавание, работа с тренером и занятия команды","caption":"Видео с тренировок FLASH SWIM","focus":"center","duration":22000},
+  {"type":"image","src":"assets/swim-original.jpg","alt":"Команда FLASH SWIM после тренировки в бассейне","caption":"Наша команда после тренировки","focus":"72% 45%","duration":7000},
+  {"type":"image","src":"assets/training-team.jpg","alt":"Ученики FLASH SWIM с тренером и плавательным инвентарём у бассейна","caption":"Тренируемся и радуемся воде","focus":"65% 45%","duration":7000}
+]
